@@ -1,0 +1,140 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>de.eq-3.plugin</groupId>
+	<artifactId>connect-api</artifactId>
+	<version>1.4.1</version>
+
+	<name>Homematic IP Connect API</name>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<properties>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<inceptionYear>2014</inceptionYear>
+		<copyrightOwner>eQ-3 AG</copyrightOwner>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>attach-artifacts</id>
+						<phase>install</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>
+										connect-api-intermediate-${project.version}.json</file>
+									<type>json</type>
+									<classifier>intermediate</classifier>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.groovy.maven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<source>
+								import java.util.Date
+								import java.text.MessageFormat
+								def
+								vartimestamp =
+								MessageFormat.format("{0,date,yyyy}", new
+								Date())
+								project.properties['currentYear'] = vartimestamp
+							</source>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.8.0</version>
+				<configuration>
+					<!-- Template location -->
+					<header>header.txt</header>
+					<properties>
+						<!-- Values to be substituted in template -->
+						<h_inceptionYear>${inceptionYear}</h_inceptionYear>
+						<h_currentYear>${currentYear}</h_currentYear>
+						<h_copyrightOwner>${copyrightOwner}</h_copyrightOwner>
+					</properties>
+					<strictCheck>true</strictCheck>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>de.eq-3.plugin</groupId>
+			<artifactId>connect-api-documentation-model</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.15.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.28</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.9.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
